@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Soumettre un bulletin — ÉCLIPSE</title>
+<meta name="description" content="Soumets un témoignage à la gazette des horreurs. Sur cette page, tout reste front-end : aucun envoi réel.">
+<meta name="theme-color" content="#050407">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+
+<div class="scrollbar" aria-hidden="true"></div>
+<div class="page-reveal" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="iris" aria-hidden="true"><span class="star"></span></span>
+    <span class="brand-name">Éclip<em>sé</em></span>
+  </a>
+  <nav class="nav-links" aria-label="Navigation principale">
+    <a href="annonces.html">Gazette</a>
+    <a href="publier.html" aria-current="page">Soumettre</a>
+    <a href="annonces.html?f=1">Favoris <span class="chip" id="favCount" hidden>0</span></a>
+  </nav>
+</header>
+
+<main class="wrap page-in">
+  <section class="section">
+    <div class="container">
+      <p class="section-kicker">Soumettre</p>
+      <h1 class="section-title reveal-title" style="font-size:clamp(2.2rem,5.4vw,4rem)">Un bulletin pour l’œil</h1>
+      <p class="section-sub">Cette page est une démonstration : rien n’est envoyé.
+      Renseigne le formulaire, regarde l’aperçu vivre à côté, puis reçois le mot de la fin.
+      Une vraie soumission écrirait ici dans <code>data/annonces.json</code>.</p>
+
+      <div class="form-grid" id="formGrid" style="margin-top:clamp(26px,4vh,44px)">
+        <form class="form-card" id="pubForm">
+          <div class="field">
+            <label for="titre">Titre du bulletin</label>
+            <input id="titre" name="titre" required maxlength="90" placeholder="Ex. La vitre du quatrième étage qui regarde en bas">
+          </div>
+          <div class="field half">
+            <div>
+              <label for="categorie">Rubrique</label>
+              <select class="select" id="categorie" name="categorie" style="width:100%"></select>
+            </div>
+            <div>
+              <label for="statut">État</label>
+              <select class="select" id="statut" name="statut" style="width:100%"></select>
+            </div>
+          </div>
+          <div class="field half">
+            <div>
+              <label for="lieu">Lieu</label>
+              <input id="lieu" name="lieu" required placeholder="Ex. Bourges, quartier du marais">
+            </div>
+            <div>
+              <label for="date">Année de l’événement</label>
+              <input id="date" name="date" required placeholder="Ex. 1934">
+            </div>
+          </div>
+          <div class="field">
+            <label for="gravite">Gravité</label>
+            <div class="seg" role="group" aria-label="Gravité">
+              <button type="button" data-grav="1" aria-pressed="false">Faible</button>
+              <button type="button" data-grav="2" aria-pressed="true">Marquée</button>
+              <button type="button" data-grav="3" aria-pressed="false">Extrême</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="extrait">Extrait (1 phrase, celle qui fait dresser l’oreille)</label>
+            <textarea id="extrait" name="extrait" required maxlength="220" rows="2"></textarea>
+          </div>
+          <div class="field">
+            <label for="recit">Récit complet</label>
+            <textarea id="recit" name="recit" required rows="6" placeholder="Date, lieux, personnes, détails qui ne tiennent pas…"></textarea>
+          </div>
+          <button class="btn primary" type="submit">Soumettre à l’œil</button>
+        </form>
+
+        <aside class="preview-sticky">
+          <p class="section-kicker">Aperçu de la carte</p>
+          <div id="preview" style="max-width:420px"></div>
+        </aside>
+      </div>
+
+      <div class="confirm" id="confirm" hidden>
+        <div class="iris" aria-hidden="true"><span class="star"></span></div>
+        <h1>Déposé sous l’œil.</h1>
+        <p>Ton bulletin rejoint la table de la nuit. La gazette le lira, le situera dans sa rubrique,
+        et s’il tient debout tout seul, il paraîtra parmi les autres, quelque part dans le noir.</p>
+        <a class="btn primary" href="annonces.html">Lire la gazette</a>
+        <a class="btn ghost" href="index.html" style="margin-left:10px">Retour à l’œil</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-about">
+      <span class="brand-name">Éclip<em>sé</em></span>
+      <p class="footer-tag">Gazette des horreurs. Chronique nocturne, tenue à la main,
+      ouverte chaque nuit quand le reste du monde ferme les yeux.</p>
+      <span class="star" aria-hidden="true"></span>
+    </div>
+    <div class="footer-col">
+      <h4>Rubriques</h4>
+      <div id="footCats"></div>
+    </div>
+    <div class="footer-col">
+      <h4>La gazette</h4>
+      <a href="annonces.html">Lire la gazette</a>
+      <a href="annonces.html?f=1">Mes favoris</a>
+      <a href="publier.html">Soumettre un bulletin</a>
+      <a href="index.html">Retour à l’œil</a>
+    </div>
+    <div class="footer-col">
+      <h4>La nuit</h4>
+      <a href="index.html#une">À la une</a>
+      <a href="index.html#chiffres">Le relevé</a>
+      <a href="index.html#marche">Comment ça marche</a>
+      <a href="index.html#publier">Publier</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 ÉCLIPSE — tout droit réservé à la nuit.</span>
+    <span>« Rien n’échappe à l’œil. »<span class="star" aria-hidden="true"></span></span>
+  </div>
+</footer>
+
+<script type="module" src="js/publier.js"></script>
+</body>
+</html>

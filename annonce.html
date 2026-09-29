@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bulletin — ÉCLIPSE</title>
+<meta name="theme-color" content="#050407">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+
+<div class="scrollbar" aria-hidden="true"></div>
+<div class="page-reveal" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="iris" aria-hidden="true"><span class="star"></span></span>
+    <span class="brand-name">Éclip<em>sé</em></span>
+  </a>
+  <nav class="nav-links" aria-label="Navigation principale">
+    <a href="annonces.html">Gazette</a>
+    <a href="publier.html">Soumettre</a>
+    <a href="annonces.html?f=1">Favoris <span class="chip" id="favCount" hidden>0</span></a>
+  </nav>
+</header>
+
+<main class="wrap page-in">
+  <section class="section detail-head">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Fil d’ariane">
+        <a href="annonces.html">Gazette</a><span>/</span><span id="crumbCat"></span>
+      </nav>
+      <h1 class="detail-title" id="titre"></h1>
+      <div class="detail-sub" id="meta"></div>
+
+      <div class="gallery">
+        <div class="gallery-main" id="mainImg" role="img" tabindex="0" aria-label="Illustration du bulletin"></div>
+        <div class="gallery-thumbs" id="thumbs"></div>
+      </div>
+
+      <div class="body2">
+        <div class="story" id="story"></div>
+        <aside class="side">
+          <div class="side-card">
+            <p class="kicker">Actualité du bulletin</p>
+            <div class="period" id="period"></div>
+            <ul class="side-meta" id="sideMeta"></ul>
+          </div>
+          <button class="btn favtoggle ghost" id="sideFav" type="button" data-fav="" aria-label="Ajouter aux favoris"></button>
+          <button class="btn primary" type="button" data-modal="#modal">Partager un témoignage</button>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="simSection">
+    <div class="container">
+      <p class="section-kicker">À côté de la nuit</p>
+      <h2 class="section-title reveal-title">Bulletins similaires</h2>
+      <div class="sim-grid" id="sim" style="margin-top:26px"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-about">
+      <span class="brand-name">Éclip<em>sé</em></span>
+      <p class="footer-tag">Gazette des horreurs. Chronique nocturne, tenue à la main,
+      ouverte chaque nuit quand le reste du monde ferme les yeux.</p>
+      <span class="star" aria-hidden="true"></span>
+    </div>
+    <div class="footer-col">
+      <h4>Rubriques</h4>
+      <div id="footCats"></div>
+    </div>
+    <div class="footer-col">
+      <h4>La gazette</h4>
+      <a href="annonces.html">Lire la gazette</a>
+      <a href="annonces.html?f=1">Mes favoris</a>
+      <a href="publier.html">Soumettre un bulletin</a>
+      <a href="index.html">Retour à l’œil</a>
+    </div>
+    <div class="footer-col">
+      <h4>La nuit</h4>
+      <a href="index.html#une">À la une</a>
+      <a href="index.html#chiffres">Le relevé</a>
+      <a href="index.html#marche">Comment ça marche</a>
+      <a href="index.html#publier">Publier</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 ÉCLIPSE — tout droit réservé à la nuit.</span>
+    <span>« Rien n’échappe à l’œil. »<span class="star" aria-hidden="true"></span></span>
+  </div>
+</footer>
+
+<!-- Modale témoignage -->
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-backdrop"></div>
+  <div class="modal-card">
+    <button class="modal-close" type="button" aria-label="Fermer">✕</button>
+    <h2 id="modalTitle">Ton témoignage, à l’oreille de l’œil</h2>
+    <p class="min">Concernant « <strong id="modalRef"></strong> ». Rien ne sera publié tel quel :
+    la gazette vérifie, recoupe, puis choisit d’écrire ou non.</p>
+    <form id="temoignageForm">
+      <div class="field" style="margin-top:16px">
+        <label for="t1">Ce que tu as vu, entendu, comprenant de travers</label>
+        <textarea id="t1" name="t" autocomplete="off" required placeholder="Écris à la nuit…"></textarea>
+      </div>
+      <button class="btn primary" type="submit" style="margin-top:6px">Déposer le témoignage</button>
+    </form>
+    <p id="modalDone" hidden style="color:var(--acc2);font-weight:600;margin-top:16px">
+      Déposé. Il dort avec les autres, sous l’œil. Merci.</p>
+  </div>
+</div>
+
+<!-- Zoom galerie -->
+<div class="gallery-open" id="zoom" role="dialog" aria-modal="true" aria-label="Agrandissement">
+  <button class="close" type="button" aria-label="Fermer l’agrandissement">✕</button>
+  <figure id="zoomImg" role="img" aria-label="Illustration agrandie"></figure>
+</div>
+
+<script type="module" src="js/annonce.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+/* ============================================================
+   Tokens ÉCLIPSE — palette, typo, motifs, easing.
+   Les couleurs ne viennent QUE d'ici (reprise des shaders).
+   ============================================================ */
+
+/* --eclipse : 0 (haut de page, bleu Éveil) → 1 (bas de page, or Éclipse).
+   @property permet d'interpoler la variable avec animation-timeline. */
+@property --eclipse { syntax:'<number>'; inherits:true; initial-value:0; }
+
+:root{
+  /* Fond */
+  --bg:#050407;          /* noir profond        */
+  --surf:#120d1a;        /* surface             */
+  --surf2:#1a1426;       /* surface surélevée   */
+  --line:rgba(236,230,218,.13);
+  --line-strong:rgba(236,230,218,.26);
+
+  /* Texte */
+  --txt:#f5f0e9;         /* crème presque blanc */
+  --txt2:#d7cee2;        /* lavande claire, bien lisible */
+
+  /* Rouge braise : urgence, favoris, prix barré */
+  --ember:#8c0d0a;
+
+  /* Bleu « Éveil » (iris avant transformation) */
+  --b1:#86f2ff; --b2:#3a8cff; --b3:#0d1f7a;
+  /* Or « Éclipse » (iris après transformation) */
+  --g1:#fff4c8; --g2:#ffb84d; --g3:#e65c0a;
+
+  /* Accents interpolés selon la progression de la page */
+  --acc1:color-mix(in oklab, var(--g1) calc(var(--eclipse,0)*100%), var(--b1));
+  --acc2:color-mix(in oklab, var(--g2) calc(var(--eclipse,0)*100%), var(--b2));
+  --acc3:color-mix(in oklab, var(--g3) calc(var(--eclipse,0)*100%), var(--b3));
+
+  /* Typo */
+  --serif:"Instrument Serif",Georgia,serif;
+  --ui:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+
+  /* Éasing commun des fondus de l'intro */
+  --ease:cubic-bezier(.2,.7,.2,1);
+
+  /* Motifs de l'œil */
+  --clip-slit:inset(48% 10% 47% 10% round 50%);
+  --clip-almond:inset(12% 4% 15% 4% round 48% / 54%);
+  --eye-br:50% 50% 47% 53% / 62% 62% 38% 38%;
+
+  /* Grain : rendu une seule fois, jamais animé en JS */
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+
+  color-scheme:dark;
+}
+
+/* --- Le site est sombre même si le système est en mode clair --- */
+html{color-scheme:only dark}
+
+/* L'avancement de la page pilote --eclipse (0→1 sur tout le document).
+   Réservé aux navigateurs qui gèrent les timelines de scroll ;
+   sinon la boucle rAF de iris.js pose la variable. */
+body{--eclipse:0}
+@keyframes eclipse-anim{ from{--eclipse:0} to{--eclipse:1} }
+@supports (animation-timeline:scroll()){
+  body{animation:eclipse-anim 1ms linear both;animation-timeline:scroll(root)}
+}
+
+/* Barre de sélection discrète */
+::selection{background:color-mix(in oklab, var(--acc2) 35%, transparent);color:var(--txt)}
+
+/* Barre de défilement élégante */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--surf2);border-radius:8px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:#322852}
+
+/* ============================================================
+   Utilitaires de motifs réutilisés partout
+   ============================================================ */
+
+/* Étoile à 8 branches — logo, loader, badge, indicateur de scroll */
+.star{
+  display:inline-block;width:1em;height:1em;flex:none;
+  clip-path:polygon(
+    50% 3%,61.9% 15.3%,72.7% 6.9%,77.6% 21.2%,92.4% 16.9%,86.7% 30.8%,
+    100% 34.7%,88.7% 43.6%,100% 52.5%,86.7% 54.1%,92.4% 67.3%,77.6% 63.7%,
+    72.7% 77.8%,61.9% 69.2%,50% 82%,38.1% 69.2%,27.3% 77.8%,22.4% 63.7%,
+    7.6% 67.3%,13.3% 54.1%,0 52.5%,11.3% 43.6%,0 34.7%,13.3% 30.8%,
+    7.6% 16.9%,22.4% 21.2%,27.3% 6.9%,38.1% 15.3%);
+  animation:star-spin 40s linear infinite;
+  transform-origin:50% 50%;
+}
+@keyframes star-spin{ to{transform:rotate(360deg)} }
+
+/* Iris : anneau + étoile qui tourne (logo / loader). Sphère de l'éclipse. */
+.iris{position:relative;display:inline-grid;place-items:center}
+.iris::before{
+  content:"";position:absolute;inset:6%;
+  border-radius:50%;
+  background:radial-gradient(circle at 50% 38%, color-mix(in oklab,var(--acc1) 90%, transparent), color-mix(in oklab,var(--acc3) 70%, transparent) 62%, transparent 72%);
+  filter:blur(3px);opacity:1;
+}
+.iris .star{position:relative;color:var(--acc1);
+  text-shadow:0 0 16px var(--acc1),0 0 30px var(--acc2)}
+
+/* Bouton en forme d'œil au survol (cf .btn dans components) */

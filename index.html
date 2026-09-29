@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ÉCLIPSE — Gazette des horreurs</title>
+<meta name="description" content="Chronique nocturne des horreurs du monde : disparitions, affaires non résolues, lieux maudits, objets troublants, phénomènes. Rien n’échappe à l’œil.">
+<meta name="theme-color" content="#050407">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/intro.css">
+</head>
+<body class="intro-on">
+<script>document.documentElement.classList.add('js');document.documentElement.classList.remove('no-js');</script>
+
+<!-- =============================================================
+     SITE ÉCLIPSE — contenu libre, l'intro et ses scripts sont en bas.
+     ============================================================= -->
+<div class="scrollbar" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="iris" aria-hidden="true"><span class="star"></span></span>
+    <span class="brand-name">Éclip<em>sé</em></span>
+  </a>
+  <nav class="nav-links" aria-label="Navigation principale">
+    <a href="annonces.html">Gazette</a>
+    <a href="publier.html">Soumettre</a>
+    <a href="annonces.html?f=1">Favoris <span class="chip" id="favCount" hidden>0</span></a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ HERO (parallaxe douce, iris qui suit la souris) ============ -->
+  <section class="hero">
+    <div class="hero-layer" data-para="0.35" style="--p:.18" aria-hidden="true">
+      <div class="hero-iris" data-gaze="18"><span class="iris"><span class="star"></span></span></div>
+    </div>
+    <div class="hero-layer copy" data-para="0.12" style="--p:.1">
+      <div class="hero-copy">
+        <span class="kicker r">Chronique nocturne</span>
+        <h1 class="r"><span class="word">Gazette</span> <span class="word acc">des horreurs</span></h1>
+        <p class="sub r">Rien n’échappe à l’œil. Déposées ici, chaque nuit, les horreurs du monde : disparitions,
+           affaires jamais closes, lieux qui ne pardonnent pas, objets qui se souviennent, signes que l’on préfère ne pas lire.</p>
+        <p class="ribbon r">— ÉCLIPSE, annonces de l’ombre —</p>
+        <form class="search r" role="search" action="annonces.html" method="get">
+          <span class="star" aria-hidden="true"></span>
+          <input type="search" name="q" placeholder="Fouiller la gazette… ex. Lyon, miroir, 1928" aria-label="Rechercher dans la gazette">
+          <button class="btn" type="submit">Entrer</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RUBRIQUES ============ -->
+  <section class="section cats" id="cats" aria-label="Rubriques de la gazette">
+    <div class="container">
+      <p class="section-kicker">Les rubriques de la nuit</p>
+      <h2 class="section-title reveal-title">Choisis ton tiroir</h2>
+      <div class="cats-track" id="catsTrack" style="margin-top:34px"></div>
+    </div>
+  </section>
+
+  <div class="fente" aria-hidden="true"></div>
+
+  <!-- ============ À LA UNE ============ -->
+  <section class="section" id="une">
+    <div class="container">
+      <p class="section-kicker">À la une</p>
+      <h2 class="section-title reveal-title">Les quatre qui reviennent</h2>
+      <div class="grid" id="gridUne" style="margin-top:28px"></div>
+    </div>
+  </section>
+
+  <div class="fente" aria-hidden="true"></div>
+
+  <!-- ============ DERNIERS BULLETINS ============ -->
+  <section class="section" id="bulletins">
+    <div class="container">
+      <p class="section-kicker">Nouvelles de la nuit</p>
+      <h2 class="section-title reveal-title">Derniers bulletins</h2>
+      <div class="grid" id="gridRecent" style="margin-top:28px"></div>
+      <p style="margin-top:26px"><a class="btn ghost" href="annonces.html">Toute la gazette →</a></p>
+    </div>
+  </section>
+
+  <div class="fente" aria-hidden="true"></div>
+
+  <!-- ============ COMPTEURS ============ -->
+  <section class="section" id="chiffres">
+    <div class="container">
+      <p class="section-kicker">Le relevé de la nuit</p>
+      <h2 class="section-title reveal-title">La gazette en chiffres</h2>
+      <div class="counters" id="counters" style="margin-top:30px"></div>
+    </div>
+  </section>
+
+  <div class="fente" aria-hidden="true"></div>
+
+  <!-- ============ COMMENT ÇA MARCHE ============ -->
+  <section class="section" id="marche">
+    <div class="container">
+      <p class="section-kicker">Comment ça marche</p>
+      <h2 class="section-title reveal-title">Trois nuits suffisent</h2>
+      <div class="steps" style="margin-top:30px">
+        <article class="step"><span class="star" aria-hidden="true"></span>
+          <h3>Écoute la nuit</h3><p>Un bruit, une ombre, une phrase qui revient, un détail qui ne tient pas.
+          Tu notes tout, sans juger, sans en parler trop fort.</p></article>
+        <article class="step"><span class="star" aria-hidden="true"></span>
+          <h3>Renseigne le formulaire</h3><p>Lieu, date, statut, récit. La forme du bulletin est libre :
+          écris ce que tu as vu, la gazette mène l’enquête à côté.</p></article>
+        <article class="step"><span class="star" aria-hidden="true"></span>
+          <h3>Le bulletin paraît</h3><p>Ton témoignage rejoint les autres, dans sa rubrique, avec sa date,
+          sa gravité et son mystère. L’œil est ouvert sur lui.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <div class="fente" aria-hidden="true"></div>
+
+  <!-- ============ APPEL À SOUMETTRE ============ -->
+  <section class="section" id="publier">
+    <div class="container">
+      <div class="cta-block">
+        <div class="iris" aria-hidden="true"><span class="star"></span></div>
+        <h2 class="reveal-title">Tu as vu quelque chose&nbsp;?</h2>
+        <p>Soumets ton témoignage. Il sera lu par l’œil, classé dans la rubrique
+        qu’il mérite, et il dormira avec les autres jusqu’à ce qu’on le comprenne.</p>
+        <a class="btn primary" href="publier.html">Soumettre un bulletin</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-about">
+      <span class="brand-name">Éclip<em>sé</em></span>
+      <p class="footer-tag">Gazette des horreurs. Chronique nocturne, tenue à la main,
+      ouverte chaque nuit quand le reste du monde ferme les yeux.</p>
+      <span class="star" aria-hidden="true"></span>
+    </div>
+    <div class="footer-col">
+      <h4>Rubriques</h4>
+      <div id="footCats"></div>
+    </div>
+    <div class="footer-col">
+      <h4>La gazette</h4>
+      <a href="annonces.html">Lire la gazette</a>
+      <a href="annonces.html?f=1">Mes favoris</a>
+      <a href="publier.html">Soumettre un bulletin</a>
+      <button class="replay-link" id="replay" type="button">Rejouer l’intro</button>
+    </div>
+    <div class="footer-col">
+      <h4>La nuit</h4>
+      <a href="index.html#une">À la une</a>
+      <a href="index.html#chiffres">Le relevé</a>
+      <a href="index.html#marche">Comment ça marche</a>
+      <a href="index.html#publier">Publier</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 ÉCLIPSE — tout droit réservé à la nuit.</span>
+    <span>« Rien n’échappe à l’œil. »<span class="star" aria-hidden="true"></span></span>
+  </div>
+</footer>
+<!-- ================== FIN DE TON SITE ================== -->
+
+<!-- Intro WebGL — à laisser tel quel -->
+<div id="intro" aria-hidden="true">
+  <canvas id="gl"></canvas>
+  <button id="skip" type="button">Passer</button>
+</div>
+
+<script src="js/shaders.js"></script>
+<script src="js/intro.js"></script>
+<script type="module" src="js/index.js"></script>
+</body>
+</html>

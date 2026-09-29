@@ -1,0 +1,63 @@
+/* ============================================================
+   Animations ÉCLIPSE — reveals par IntersectionObserver (partout),
+   scroll-driven réservé aux effets décoratifs (--eclipse, barre,
+   navigation, parallaxe).
+   Règle : on n'anime que transform, opacity, clip-path.
+   ============================================================ */
+
+/* Élément général « apparition en œil » posé par scroll.js (.wake) :
+   caché initialement (fente), révélé en ajoutant .in (IntersectionObserver)
+   jusqu'à plein cadre — jamais de recadrage permanent qui masquerait le
+   texte. Cascade par rangée via --i. */
+.wake{clip-path:var(--clip-slit);opacity:0}
+.wake.in{clip-path:inset(0);opacity:1;
+  transition:clip-path .85s var(--ease),opacity .6s var(--ease);
+  transition-delay:calc(var(--i,0)*85ms)}
+
+/* Parallaxe douce du hero : chaque plan a son rythme via --p (posé en HTML) */
+.hero-layer{will-change:transform}
+@keyframes para{to{transform:translate3d(0,calc(var(--p,0)*10vh),0)}}
+@supports (animation-timeline:scroll()){
+  .hero-layer{animation:para 1ms linear backwards;animation-timeline:scroll(root);animation-range:0 90vh}
+}
+
+/* ============================================================
+   Sans JavaScript : tout est visible, rien n'est caché.
+   ============================================================ */
+html:not(.js) .wake,
+html:not(.js) .card,
+html:not(.js) .reveal-title .wd,
+html:not(.js) .fente::after{
+  clip-path:inset(0)!important;opacity:1!important;transform:none!important;transition:none
+}
+html:not(.js) .counter::before{transform:scaleY(1)}
+
+/* ============================================================
+   Ouverture « fente » des pages secondaires (sans intro WebGL)
+   ============================================================ */
+.page-reveal{
+  position:fixed;inset:0;z-index:80;pointer-events:none;background:var(--bg);
+  clip-path:var(--clip-slit);
+  animation:pageSlit 1s var(--ease) forwards;
+}
+@keyframes pageSlit{
+  0%{clip-path:var(--clip-slit)}
+  55%{clip-path:var(--clip-almond)}
+  100%{clip-path:inset(-1% 0 -1% 0);opacity:0}
+}
+.page-in{animation:pageIn .8s var(--ease) both;animation-delay:.12s}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ============================================================
+   prefers-reduced-motion : simple fondu, tout visible.
+   (l'intro est sautée par intro.js)
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .wake,.card,.card.in,
+  .reveal-title .wd,.fente::after,.counter::before{
+    clip-path:inset(0)!important;opacity:1!important;transform:none!important
+  }
+  .hero-layer{will-change:auto}
+  .star{animation:none}
+}

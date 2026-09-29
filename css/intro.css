@@ -1,0 +1,28 @@
+/* ============================================================
+   Intro WebGL — styles techniques de l'animation.
+   Pas besoin de modifier ce fichier : ton design va dans site.css.
+   ============================================================ */
+
+/* Bloque le défilement pendant l'intro */
+body.intro-on{overflow:hidden}
+
+/* Calque plein écran de l'intro */
+#intro{position:fixed;inset:0;z-index:100;background:#000}
+#intro.revealing{background:transparent}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* Bouton « Passer » */
+#skip{position:absolute;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));font:600 .85rem Manrope,system-ui,sans-serif;color:rgba(255,255,255,.55);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:.6em 1.1em;cursor:pointer;transition:opacity .3s}
+#skip:hover{color:#fff}
+#skip:focus-visible{outline:2px solid #d9ae5f;outline-offset:3px}
+#intro.revealing #skip{opacity:0;pointer-events:none}
+
+/* Apparition en fondu après l'intro : ajoute la classe "r" à n'importe quel élément */
+.r{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+body.site-in .r{opacity:1;transform:none}
+/* Petit décalage entre éléments voisins (tu peux en ajouter) */
+.r:nth-child(2){transition-delay:.07s}
+.r:nth-child(3){transition-delay:.14s}
+.r:nth-child(4){transition-delay:.21s}
+
+@media (prefers-reduced-motion:reduce){.r{transition:none}}
