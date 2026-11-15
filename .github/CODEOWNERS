@@ -1,1 +1,4 @@
+# " * " signifie : tous les fichiers du dépôt.
+# "@rayague" demande automatiquement Ray comme reviewer sur chaque pull request.
+# GitHub utilise ce fichier pour savoir qui doit relire les changements.
 * @rayague

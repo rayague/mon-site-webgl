@@ -1,44 +1,81 @@
+# Nom affiché dans l'onglet "Actions" de GitHub.
 name: Pipeline
 
+# "on" décrit les événements qui déclenchent le pipeline.
 on:
+  # Le pipeline se lance sur chaque push, quelle que soit la branche.
   push:
     branches: ['**']
+
+  # Le pipeline se lance aussi quand une pull request vise "dev" ou "main".
   pull_request:
     branches: [dev, main]
+
+  # Permet de lancer le pipeline à la main depuis l'onglet "Actions".
   workflow_dispatch:
 
+# Permissions par défaut : le pipeline peut seulement lire le contenu du dépôt.
+# C'est une sécurité : un workflow ne doit pas pouvoir modifier le dépôt sans raison.
 permissions:
   contents: read
 
+# Empêche plusieurs exécutions identiques de tourner en même temps.
+# Si un nouveau push arrive, l'ancien pipeline est annulé.
 concurrency:
   group: pipeline-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# "jobs" contient les tâches du pipeline.
+# Elles peuvent tourner en parallèle, sauf si "needs" impose un ordre.
 jobs:
+  # Job 1 : vérifier la qualité du code et des données.
   quality:
+    # Nom affiché dans GitHub Actions.
     name: quality
+
+    # Le job tourne sur une machine Linux fournie par GitHub.
     runs-on: ubuntu-latest
+
+    # Liste des étapes exécutées dans l'ordre.
     steps:
+      # Récupère le code du dépôt sur la machine du runner.
       - uses: actions/checkout@v4
+
+      # Installe Node.js 24 et active le cache npm.
       - uses: actions/setup-node@v4
         with:
+          # Node 24 est nécessaire pour les outils utilisés par le projet.
           node-version: 24
+
+          # Réutilise le cache npm pour accélérer les installations suivantes.
           cache: npm
+
+      # "npm ci" installe exactement les versions prévues dans package-lock.json.
+      # C'est plus fiable que "npm install" dans une CI.
       - run: npm ci
+
+      # Lance la vérification complète : HTML, CSS, JavaScript et données.
       - run: npm run ci
 
+  # Job 2 : vérifier le sens de la pull request.
+  # Il ne tourne que pour une pull request, jamais pour un simple push.
   flow-guard:
     name: flow-guard
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
+      # Cette étape utilise un script Bash écrit directement dans le workflow.
       - name: Vérifier le sens de la PR
         shell: bash
         run: |
+          # "base" est la branche qui reçoit la PR.
+          # "head" est la branche qui propose les changements.
           base="${{ github.base_ref }}"
           head="${{ github.head_ref }}"
           echo "PR : $head -> $base"
 
+          # Une PR vers main doit venir de dev ou d'une branche hotfix/*.
+          # Cela évite de mettre en production une branche de travail personnelle.
           if [ "$base" = "main" ]; then
             case "$head" in
               dev|hotfix/*) ;;
@@ -46,6 +83,8 @@ jobs:
             esac
           fi
 
+          # Une PR vers dev doit venir d'une branche feature/*.
+          # Cela garde un historique clair : une fonctionnalité = une branche.
           if [ "$base" = "dev" ]; then
             case "$head" in
               feature/*) ;;
@@ -53,24 +92,46 @@ jobs:
             esac
           fi
 
+  # Job 3 : déployer le site public sur GitHub Pages.
   deploy:
     name: deploy
+
+    # Le déploiement attend que le job "quality" réussisse.
     needs: quality
+
+    # Le déploiement ne se lance que depuis la branche main,
+    # et seulement après un push ou un lancement manuel.
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
+
+    # Permissions spéciales nécessaires pour publier sur GitHub Pages.
     permissions:
+      # Lire les fichiers du dépôt.
       contents: read
+
+      # Écrire sur GitHub Pages.
       pages: write
+
+      # Utiliser un jeton temporaire fourni par GitHub.
       id-token: write
+
+    # Relie le job à l'environnement "github-pages" de GitHub.
     environment:
       name: github-pages
+      # URL affichée par GitHub après le déploiement.
       url: ${{ steps.deployment.outputs.page_url }}
+
+    # Un seul déploiement Pages à la fois, et on ne l'annule pas au milieu.
     concurrency:
       group: pages
       cancel-in-progress: false
+
     steps:
+      # Récupère le code de la branche main.
       - uses: actions/checkout@v4
 
+      # Prépare un dossier "_site" contenant uniquement les fichiers du site.
+      # Ce dossier n'est pas commité : il existe seulement sur la machine du runner.
       - name: Préparer le site
         run: |
           rm -rf _site
@@ -78,9 +139,15 @@ jobs:
           cp -R index.html annonces.html annonce.html publier.html css js data assets _site/
           touch _site/.nojekyll
 
+      # Prépare la configuration GitHub Pages pour ce dépôt.
       - uses: actions/configure-pages@v5
+
+      # Envoie le dossier "_site" comme artefact à publier.
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+
+      # Publie réellement le site sur GitHub Pages.
+      # L'identifiant "deployment" permet de récupérer l'URL finale.
       - id: deployment
         uses: actions/deploy-pages@v4
