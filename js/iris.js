@@ -37,16 +37,16 @@ const progress = document.querySelector('.scrollbar');
 const nav = document.querySelector('.nav');
 const parallax = [...document.querySelectorAll('.hero-layer')];
 
-let raf = 0, running = false;
-function loop(now){
+let running = false;
+function loop(){
   if (document.hidden) { running = false; return; }
   step();
-  raf = requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
 }
 function start(){
   if (running) return;
   running = true;
-  raf = requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
 }
 document.addEventListener('visibilitychange', () => (document.hidden ? (running = false) : start()));
 

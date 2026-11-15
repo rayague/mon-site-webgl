@@ -1,7 +1,7 @@
 /* annonces.js — liste des bulletins : filtres, tri, recherche, URL. */
 import { load, CATEGORIES, decade } from './data.js';
 import { mount } from './card.js';
-import { scan, SCROLL_OK } from './scroll.js';
+import { scan } from './scroll.js';
 import { isFav, syncFavs, wireModals } from './ui.js';
 import './iris.js';
 
@@ -35,7 +35,7 @@ try {
     s: p.get('s') || '', f: p.get('f') === '1', sort: p.get('sort') || 'recent'
   };
   dirty = true;
-} catch (e) {}
+} catch {}
 
 function syncControls(){
   fQ.value = state.q;

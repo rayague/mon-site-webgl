@@ -1,9 +1,9 @@
 /* ui.js — favoris (localStorage), ondes de choc, modale, icônes. */
 const KEY = 'eclipse-favs';
 let favs = new Set();
-try { favs = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) { favs = new Set(); }
+try { favs = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch { favs = new Set(); }
 
-function persist(){ try { localStorage.setItem(KEY, JSON.stringify([...favs])); } catch (e) {} }
+function persist(){ try { localStorage.setItem(KEY, JSON.stringify([...favs])); } catch {} }
 
 export function isFav(id){ return favs.has(String(id)); }
 export function toggleFav(id){

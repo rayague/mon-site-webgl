@@ -1,7 +1,7 @@
 /* index.js — accueil : rubriques, à la une, derniers bulletins, compteurs. */
-import { load, CATEGORIES, decade } from './data.js';
+import { load, CATEGORIES } from './data.js';
 import { mount, card } from './card.js';
-import { scan, SCROLL_OK } from './scroll.js';
+import { scan } from './scroll.js';
 import './iris.js';
 import { wireModals } from './ui.js';
 
@@ -64,4 +64,4 @@ try {
     const input = document.querySelector('.search input');
     if (input) { input.value = q; input.focus(); }
   }
-} catch (e) {}
+} catch {}
