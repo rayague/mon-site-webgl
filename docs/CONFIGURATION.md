@@ -466,16 +466,19 @@ Il a deux modes, appelés par deux commandes npm :
 |---|---|
 | En-tête | Explique les deux commandes et la nécessité de `gh auth login`. |
 | `SITE_URL` | Adresse du site public vérifiée à la fin. |
+| `REQUIRED_CHECKS` | Checks obligatoires : `quality` et `flow-guard`. |
 | `MODE` | Choisit entre le mode préparation et le mode merge. |
 | `run` | Lance une commande et récupère son résultat. |
 | `runInherit` | Lance une commande en affichant sa sortie dans le terminal. |
 | `runNpm` | Lance npm de façon compatible avec Windows et macOS/Linux. |
 | `fail` | Affiche une erreur et arrête le script. |
-| `sleep` | Petite pause pour attendre GitHub. |
+| `sleep` | Petite pause asynchrone pour attendre GitHub. |
+| `sleepSync` | Même pause, en version synchrone. |
 | `checkGh` | Vérifie que GitHub CLI est installé et connecté. |
 | `findOpenReleasePr` | Cherche la PR ouverte `dev` → `main`. |
 | `viewPr` | Lit l'état de la PR : approbation, checks, commit de tête. |
-| `waitChecks` | Attend la fin de `quality` et `flow-guard`. |
+| `waitRequiredChecks` | Vérifie explicitement que `quality` et `flow-guard` sont réussis. |
+| `waitChecks` | Attend `gh pr checks`, puis appelle `waitRequiredChecks`. |
 | `ensureUpToDate` | Met `dev` à jour si `main` a avancé. |
 | `waitForRun` | Attend que le workflow `Pipeline` apparaisse pour le commit de merge. |
 | `prepareRelease` | Vérifie `dev`, lance `npm run ci`, crée la PR, attend les checks et affiche l'étape suivante. |
@@ -487,6 +490,7 @@ Il a deux modes, appelés par deux commandes npm :
 - Le script vérifie qu'on est bien sur `dev` avant de préparer la release.
 - Il refuse s'il reste des modifications non commitées.
 - Il attend les checks avant de proposer le merge.
+- Il attend explicitement `flow-guard`, car juste après la création d'une PR, `gh pr checks` peut ne voir que le run `push` et pas encore le run `pull_request`.
 - Il vérifie qu'une approbation existe avant de merger.
 - Il utilise `--match-head-commit` pour merger exactement le commit qui a été approuvé.
 - Il ne peut pas approuver à la place d'une autre personne.
