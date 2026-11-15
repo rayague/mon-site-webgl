@@ -25,11 +25,14 @@ js/iris.js         une seule boucle rAF : iris du hero, parallaxe, --eclipse
 js/ui.js           favoris (localStorage), modale, toast « choc », étoile
 js/index.js / annonces.js / annonce.js / publier.js   logique par page
 assets/            images réelles à venir (WebP) — `image` dans annonces.json
+.github/           pipeline CI/CD, modèle de PR, CODEOWNERS
+scripts/           push.mjs, release.mjs, validate-data.mjs
+docs/              guide du projet, configuration, présentation
 ```
 
 ## Ajouter un bulletin
 
-Ajoute un objet dans `data/annonces.json` (les champ `id`, `slug`, `auteur`, `ori`, `sombre`, `statut`, `image` doivent suivre le modèle). Pas besoin d'image : un visuel sombre est généré automatiquement. Dépose ensuite un WebP dans `assets/` et renseigne `image` pour le remplacer.
+Ajoute un objet dans `data/annonces.json` (les champs `id`, `titre`, `categorie`, `lieu`, `date`, `statut`, `extrait`, `recit`, `date_pub` et `image` sont obligatoires). Pas besoin d'image : un visuel sombre est généré automatiquement. Dépose ensuite un WebP dans `assets/` et renseigne `image` pour le remplacer. Le script `npm run check:data` vérifie les champs, les doublons et le nombre d'annonces.
 
 ## Réglages (en haut de `js/intro.js`)
 
@@ -52,24 +55,45 @@ Le bloc `<div id="intro">…</div>` et les scripts `shaders.js`/`intro.js` ne so
 ## Tester en local
 
 ```bash
+npm ci
+npm run ci
 python -m http.server 8000
 ```
 
 puis ouvre http://localhost:8000
 
+`npm run ci` vérifie le HTML, le CSS, le JavaScript et les 30 annonces avant de pousser le code.
+
 ## Mettre en ligne (GitHub Pages)
 
-```bash
-git init -b main
-git add -A
-git commit -m "Premier commit"
-gh repo create NOM-DU-DEPOT --public --source=. --remote=origin --push
+Le déploiement est automatisé par GitHub Actions. Un merge dans `main` déclenche le workflow `Pipeline`, puis le job `deploy` publie le site sur GitHub Pages.
+
+```powershell
+git switch dev
+git pull --ff-only
+npm run release
 ```
 
-Dans le dépôt : **Settings → Pages → Deploy from a branch**, branche `main`, dossier `/ (root)`.
+Après l'approbation d'une autre personne :
+
+```powershell
+npm run release:merge
+```
+
+Le site public est disponible ici : https://rayague.github.io/mon-site-webgl/
+
+Pour le détail du flux, voir `.github/workflows/pipeline.yml` et `docs/GUIDE-PROJET.md`.
+
+## Documentation
+
+- `docs/GUIDE-PROJET.md` : comprendre le projet, les branches, la CI/CD et le rôle de chacun.
+- `docs/CONFIGURATION.md` : explication détaillée de chaque fichier de configuration.
+- `docs/PRESENTATION.md` : paragraphe de présentation, plan et questions fréquentes.
+- `CONTRIBUTING.md` : règles de travail en équipe et commandes utiles.
 
 ## Bon à savoir
 
 - Sans WebGL2 ou avec « réduire les animations », le site s'affiche directement.
 - Tout le contenu est présent dans la page dès le chargement (bon pour le référencement).
-- Aucune dépendance ; seules les polices viennent de Google Fonts.
+- Aucune dépendance à l'exécution : le navigateur ne télécharge que les polices Google Fonts.
+- Les outils ESLint, Stylelint et html-validate servent uniquement au développement et à la CI.
