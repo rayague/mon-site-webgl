@@ -1,3 +1,8 @@
+# Fichier créé automatiquement par macOS : inutile de le versionner.
 .DS_Store
+
+# Dossier des dépendances installées par npm : il est recréé avec "npm ci".
 node_modules/
+
+# Dossier temporaire créé par le déploiement GitHub Pages : jamais commité.
 _site/
