@@ -13,6 +13,9 @@ import { execFileSync } from "node:child_process";
 // Adresse du site public vérifiée à la fin du déploiement.
 const SITE_URL = "https://rayague.github.io/mon-site-webgl/";
 
+// Checks obligatoires définis dans la protection de la branche main.
+const REQUIRED_CHECKS = ["quality", "flow-guard"];
+
 // Si le script est lancé avec "--merge", on est en mode merge.
 // Sinon, on est en mode préparation de la release.
 const MODE = process.argv.includes("--merge") ? "merge" : "prepare";
@@ -44,6 +47,10 @@ const fail = (message) => {
 
 // Petite pause utilisée pour attendre GitHub entre deux vérifications.
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Même pause, mais en version synchrone pour les fonctions qui ne sont pas async.
+const sleepSync = (ms) =>
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 
 // Vérifie que GitHub CLI est installé et connecté.
 const checkGh = () => {
@@ -81,6 +88,49 @@ const viewPr = (number) => JSON.parse(run("gh", [
   "--json", "number,url,reviewDecision,mergeStateStatus,mergeable,headRefOid,mergeCommit,state"
 ]));
 
+// Vérifie que les checks obligatoires sont bien présents et réussis.
+// Juste après la création d'une PR, "gh pr checks" peut ne voir que le run "push"
+// et pas encore le run "pull_request". On attend donc explicitement flow-guard.
+const waitRequiredChecks = (number) => {
+  const deadline = Date.now() + 120000;
+
+  while (Date.now() < deadline) {
+    const raw = run("gh", [
+      "pr", "view", String(number),
+      "--json", "statusCheckRollup"
+    ]);
+    const checks = JSON.parse(raw).statusCheckRollup || [];
+    const missing = [];
+    const failed = [];
+
+    for (const name of REQUIRED_CHECKS) {
+      const runs = checks.filter((check) => (check.name || check.context) === name);
+      const stateOf = (check) => check.conclusion || check.state;
+
+      if (runs.some((check) => stateOf(check) === "SUCCESS")) continue;
+
+      if (runs.some((check) => [
+        "FAILURE", "CANCELLED", "TIMED_OUT", "ACTION_REQUIRED", "STARTUP_FAILURE"
+      ].includes(stateOf(check)))) {
+        failed.push(name);
+      } else {
+        missing.push(name);
+      }
+    }
+
+    if (failed.length > 0) {
+      fail(`Check(s) en échec sur la PR #${number} : ${failed.join(", ")}. Détail : gh pr checks ${number}`);
+    }
+
+    if (missing.length === 0) return;
+
+    console.log(`En attente des checks obligatoires : ${missing.join(", ")}...`);
+    sleepSync(5000);
+  }
+
+  fail(`Les checks obligatoires de la PR #${number} ne sont pas apparus. Détail : gh pr checks ${number}`);
+};
+
 // Attend la fin des checks GitHub.
 // "gh pr checks --watch" reste actif jusqu'à ce que quality et flow-guard soient terminés.
 const waitChecks = (number) => {
@@ -91,6 +141,8 @@ const waitChecks = (number) => {
     console.error(`Détail : gh pr checks ${number}`);
     process.exit(1);
   }
+
+  waitRequiredChecks(number);
 };
 
 // Si main a avancé, GitHub peut demander de mettre dev à jour.
