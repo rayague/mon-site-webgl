@@ -1,0 +1,86 @@
+name: Pipeline
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pipeline-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run ci
+
+  flow-guard:
+    name: flow-guard
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier le sens de la PR
+        shell: bash
+        run: |
+          base="${{ github.base_ref }}"
+          head="${{ github.head_ref }}"
+          echo "PR : $head -> $base"
+
+          if [ "$base" = "main" ]; then
+            case "$head" in
+              dev|hotfix/*) ;;
+              *) echo "::error::Une PR vers main doit venir de dev ou hotfix/*."; exit 1 ;;
+            esac
+          fi
+
+          if [ "$base" = "dev" ]; then
+            case "$head" in
+              feature/*) ;;
+              *) echo "::error::Une PR vers dev doit venir de feature/*."; exit 1 ;;
+            esac
+          fi
+
+  deploy:
+    name: deploy
+    needs: quality
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Préparer le site
+        run: |
+          rm -rf _site
+          mkdir -p _site
+          cp -R index.html annonces.html annonce.html publier.html css js data assets _site/
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

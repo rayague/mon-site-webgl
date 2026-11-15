@@ -4,7 +4,7 @@
 
 export const SCROLL_OK = (() => {
   try { return CSS.supports('animation-timeline', 'view()') || 'animationTimeline' in document.documentElement.style; }
-  catch (e) { return false; }
+  catch { return false; }
 })();
 
 const ioOptions = { rootMargin: '0px 0px -12% 0px', threshold: 0 };

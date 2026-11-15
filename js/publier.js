@@ -1,7 +1,7 @@
 /* publier.js — formulaire front-only avec aperçu de carte en direct. */
 import { load, CATEGORIES } from './data.js';
 import { card } from './card.js';
-import { scan, SCROLL_OK } from './scroll.js';
+import { scan } from './scroll.js';
 import { syncFavs, wireModals } from './ui.js';
 import './iris.js';
 
@@ -60,7 +60,7 @@ field('pubForm').addEventListener('submit', e => {
   field('formGrid').hidden = true;
   field('confirm').hidden = false;
   syncFavs();
-  try { scrollTo(0, 0); } catch (err) {}
+  try { scrollTo(0, 0); } catch {}
 });
 
 document.getElementById('footCats').innerHTML =
