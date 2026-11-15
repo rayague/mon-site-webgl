@@ -40,7 +40,11 @@ export function shock(el){
   setTimeout(() => el.classList.remove('shock'), 900);
 }
 
-/* Initialise l'état des boutons favoris déjà présents dans le DOM */
+/**
+ * @description
+ * Initialise l'état des boutons favoris déjà présents dans le DOM.
+ * @returns {void}
+ */
 export function syncFavs(){
   document.querySelectorAll('[data-fav]').forEach(b => {
     const on = isFav(b.dataset.fav);
