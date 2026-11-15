@@ -1,9 +1,9 @@
 /* annonce.js — fiche bulletin : galerie en œil, témoignage, similaires. */
 import { load, CATEGORIES } from './data.js';
 import { bg } from './images.js';
-import { favStar, syncFavs, wireModals, openModal, closeModal } from './ui.js';
+import { favStar, syncFavs, wireModals } from './ui.js';
 import { mount } from './card.js';
-import { scan, SCROLL_OK } from './scroll.js';
+import { scan } from './scroll.js';
 import './iris.js';
 
 const data = await load();

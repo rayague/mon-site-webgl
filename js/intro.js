@@ -9,13 +9,13 @@
   const body = document.body;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let seen = false;
-  try { seen = ONCE_PER_SESSION && sessionStorage.getItem('introSeen') === '1'; } catch (e) {}
+  try { seen = ONCE_PER_SESSION && sessionStorage.getItem('introSeen') === '1'; } catch {}
 
   function showSite() {
     intro.style.display = 'none';
     body.classList.remove('intro-on');
     requestAnimationFrame(() => body.classList.add('site-in'));
-    try { sessionStorage.setItem('introSeen', '1'); } catch (e) {}
+    try { sessionStorage.setItem('introSeen', '1'); } catch {}
   }
   if (reduced || seen) { showSite(); return; }
 
@@ -228,7 +228,7 @@
     running = false;
     showSite();
     /* l'intro est finie : on rend la carte graphique au site */
-    try { const ext = gl.getExtension('WEBGL_lose_context'); if (ext) ext.loseContext(); } catch (e) {}
+    try { const ext = gl.getExtension('WEBGL_lose_context'); if (ext) ext.loseContext(); } catch {}
   }
   document.getElementById('skip').addEventListener('click', () => { if (t < SKIP_TO) t = SKIP_TO; });
   // bouton facultatif : n'importe quel élément avec id="replay" relance l'intro

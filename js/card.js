@@ -1,7 +1,7 @@
 /* card.js — rendu d'une carte bulletin (accueil, liste, aperçu, similaires). */
 import { bg } from './images.js';
 import { favStar, syncFavs } from './ui.js';
-import { scan, SCROLL_OK } from './scroll.js';
+import { scan } from './scroll.js';
 
 function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
 
