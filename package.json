@@ -8,7 +8,8 @@
     "lint:html": "html-validate index.html annonces.html annonce.html publier.html",
     "lint:css": "stylelint \"css/**/*.css\"",
     "lint:js": "eslint \"js/**/*.js\"",
-    "check:data": "node scripts/validate-data.mjs"
+    "check:data": "node scripts/validate-data.mjs",
+    "push": "node scripts/push.mjs"
   },
   "engines": {
     "node": ">=24.15.0"
