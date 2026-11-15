@@ -67,9 +67,14 @@ function countUp(card){
   requestAnimationFrame(tick);
 }
 
-/* Balaye un conteneur et enregistre les éléments à révéler.
-   Tous les reveals passent par IntersectionObserver (fiable partout) :
-   titres mot par mot, compteurs, cartes et fentes. */
+/**
+ * @description
+ * Balaye un conteneur et enregistre les éléments à révéler.
+ * Tous les reveals passent par IntersectionObserver (fiable partout) :
+ * titres mot par mot, compteurs, cartes et fentes.
+ * @param {HTMLElement} root - Le conteneur à balayer.
+ * @returns {void}
+ */
 export function scan(root = document){
   const obs = ensureIO();
   root.querySelectorAll('.reveal-title').forEach(el => { splitWords(el); obs.observe(el); });

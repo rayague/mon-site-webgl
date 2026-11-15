@@ -14,11 +14,11 @@ export function card(a, i = 0, extra = ''){
     <button class="fav" type="button" data-fav="${a.id}" aria-label="Ajouter aux favoris">${favStar}</button>
   </div>
   <div class="card-body">
-    <div class="card-meta"><span class="cat">${esc(a.categorie)}</span><span class="place">${esc(a.lieu)} · ${esc(a.date)}</span></div>
-    <h3 class="card-title"><a href="annonce.html?id=${a.id}">${esc(a.titre)}</a></h3>
-    <p class="card-excerpt">${esc(a.extrait)}</p>
+    <div class="card-meta"><span class="cat" data-field="categorie">${esc(a.categorie)}</span><span class="place"><span data-field="lieu">${esc(a.lieu)}</span> · <span data-field="date">${esc(a.date)}</span></span></div>
+    <h3 class="card-title"><a href="annonce.html?id=${a.id}" data-field="titre">${esc(a.titre)}</a></h3>
+    <p class="card-excerpt" data-field="extrait">${esc(a.extrait)}</p>
     <div class="card-foot">
-      <span class="statut">${esc(a.statut)}</span>
+      <span class="statut" data-field="statut">${esc(a.statut)}</span>
       <span class="grav" data-g="${a.gravite}" aria-label="Gravité ${a.gravite} sur 3"><i></i><i></i><i></i></span>
     </div>
   </div>
