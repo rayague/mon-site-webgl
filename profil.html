@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mon profil — ÉCLIPSE</title>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="iris" aria-hidden="true"><span class="star"></span></span>
+    <span class="brand-name">Éclip<em>sé</em></span>
+  </a>
+  <nav class="nav-links" aria-label="Navigation principale">
+    <a href="annonces.html">Gazette</a>
+    <a href="publier.html">Soumettre</a>
+  </nav>
+</header>
+
+<main class="wrap section">
+  <div class="container" style="max-width:560px">
+    <p class="section-kicker">Ton identité</p>
+    <h1 class="section-title">Mon profil</h1>
+    <form class="form-card" id="profile-form" style="margin-top:28px">
+      <div class="field">
+        <label for="username">Nom d’utilisateur</label>
+        <input id="username" type="text" maxlength="30" autocomplete="nickname">
+      </div>
+      <div class="field">
+        <label for="full-name">Nom complet</label>
+        <input id="full-name" type="text" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="bio">Présentation</label>
+        <textarea id="bio" rows="5"></textarea>
+      </div>
+      <button class="btn primary" type="submit">Enregistrer</button>
+    </form>
+    <p id="profile-message" class="section-sub" role="status"></p>
+  </div>
+</main>
+
+<script type="module" src="js/profil.js"></script>
+<script type="module" src="js/auth-nav.js"></script>
+</body>
+</html>

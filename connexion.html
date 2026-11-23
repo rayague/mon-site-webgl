@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Connexion — ÉCLIPSE</title>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="iris" aria-hidden="true"><span class="star"></span></span>
+    <span class="brand-name">Éclip<em>sé</em></span>
+  </a>
+  <nav class="nav-links" aria-label="Navigation principale">
+    <a href="annonces.html">Gazette</a>
+    <a href="publier.html">Soumettre</a>
+  </nav>
+</header>
+
+<main class="wrap section">
+  <div class="container" style="max-width:560px">
+    <p class="section-kicker">Sous l’œil</p>
+    <h1 class="section-title">Connexion</h1>
+    <form class="form-card" id="login-form" style="margin-top:28px">
+      <div class="field">
+        <label for="email">Adresse email</label>
+        <input id="email" type="email" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" required autocomplete="current-password">
+      </div>
+      <button class="btn primary" type="submit">Se connecter</button>
+    </form>
+    <p id="auth-message" class="section-sub" role="status"></p>
+    <p class="section-sub">Pas encore de compte ? <a href="inscription.html">Créer un compte</a></p>
+  </div>
+</main>
+
+<script type="module" src="js/connexion.js"></script>
+<script type="module" src="js/auth-nav.js"></script>
+</body>
+</html>
