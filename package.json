@@ -5,7 +5,7 @@
   "description": "Site ÉCLIPSE — CI/CD",
   "scripts": {
     "ci": "npm run lint:html && npm run lint:css && npm run lint:js && npm run check:data",
-    "lint:html": "html-validate index.html annonces.html annonce.html publier.html",
+    "lint:html": "html-validate \"*.html\"",
     "lint:css": "stylelint \"css/**/*.css\"",
     "lint:js": "eslint \"js/**/*.js\"",
     "check:data": "node scripts/validate-data.mjs",
