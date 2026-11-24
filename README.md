@@ -2,7 +2,7 @@
 
 Site « annonces de l'ombre » construit derrière l'intro WebGL2 « Yeux » : une chronique nocturne qui dépose, chaque nuit, les horreurs du monde (disparitions, lieux maudits, objets troublants, …).
 
-## Contenu du dossier
+## Contenu du dossier:
 
 ```
 index.html         accueil : intro WebGL, hero, rail, à la une, compteurs, CTA
