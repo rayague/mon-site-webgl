@@ -4,6 +4,7 @@ import { card } from "./card.js";
 import { scan } from "./scroll.js";
 import { syncFavs, wireModals } from "./ui.js";
 import { supabase } from "./supabase.js";
+import { toast } from "./toast.js";
 import "./iris.js";
 
 const data = await load();
@@ -155,9 +156,11 @@ field("pubForm").addEventListener("submit", async (event) => {
   if (error) {
     submitButton.disabled = false;
     message.textContent = error.message;
+    toast(error.message, { tone: "err", id: "publish" });
     return;
   }
 
+  toast("Bulletin déposé dans la gazette.", { tone: "ok", id: "publish" });
   field("formGrid").hidden = true;
   field("confirm").hidden = false;
   syncFavs();

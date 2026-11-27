@@ -1,4 +1,5 @@
 import { supabase } from "./supabase.js";
+import { toast } from "./toast.js";
 
 const form = document.getElementById("login-form");
 const message = document.getElementById("auth-message");
@@ -24,6 +25,7 @@ form.addEventListener("submit", async (event) => {
 
   if (error) {
     message.textContent = error.message;
+    toast(error.message, { tone: "err", id: "auth" });
     return;
   }
 

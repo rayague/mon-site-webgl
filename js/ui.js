@@ -1,4 +1,5 @@
 /* ui.js — favoris (localStorage), ondes de choc, modale, icônes. */
+import { toast } from "./toast.js";
 const KEY = 'eclipse-favs';
 let favs = new Set();
 try { favs = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch { favs = new Set(); }
@@ -22,6 +23,10 @@ document.addEventListener('click', e => {
     e.preventDefault();
     shock(fav);
     const on = toggleFav(fav.dataset.fav);
+    toast(on ? "Ajouté aux favoris." : "Retiré des favoris.", {
+      tone: on ? "ok" : "info",
+      id: "fav"
+    });
     document.querySelectorAll('[data-fav="' + fav.dataset.fav + '"]').forEach(b => {
       b.classList.toggle('on', on);
       b.setAttribute('aria-pressed', on);

@@ -1,4 +1,5 @@
 import { supabase } from "./supabase.js";
+import { toast } from "./toast.js";
 
 const list = document.getElementById("my-annonces");
 const message = document.getElementById("my-annonces-message");
@@ -63,7 +64,9 @@ async function loadMyAnnouncements() {
 
       if (deleteError) {
         message.textContent = deleteError.message;
+        toast(deleteError.message, { tone: "err", id: "mine" });
       } else {
+        toast("Bulletin supprimé.", { tone: "ok", id: "mine" });
         await loadMyAnnouncements();
       }
     });

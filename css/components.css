@@ -330,6 +330,36 @@
 .confirm p{color:var(--txt2);max-width:48ch;margin:0 auto 28px}
 
 /* ============================================================
+   Toaster — pile de notifications en bas à droite
+   ============================================================ */
+.toasts{
+  position:fixed;z-index:80;display:flex;flex-direction:column;gap:10px;
+  width:min(340px, calc(100vw - 32px));pointer-events:none;
+  right:max(16px, env(safe-area-inset-right));
+  bottom:max(16px, env(safe-area-inset-bottom));
+}
+.toast{
+  pointer-events:auto;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;
+  padding:14px 12px 14px 16px;border-radius:16px;color:var(--txt);
+  background:color-mix(in srgb, var(--surf2) 92%, transparent);
+  border:1px solid var(--line-strong);
+  box-shadow:0 18px 50px -24px #000;backdrop-filter:blur(10px);
+  animation:toast-in .4s var(--ease) both;
+}
+.toast p{margin:0;font:600 .9rem var(--ui);line-height:1.4}
+.toast.ok{border-color:color-mix(in oklab, var(--g2) 55%, var(--line))}
+.toast.err{border-color:color-mix(in srgb, var(--ember) 75%, var(--line));color:#ffdde0}
+.toast.out{animation:toast-out .28s var(--ease) forwards}
+.toast-close{
+  width:28px;height:28px;border-radius:50%;border:1px solid var(--line);
+  background:transparent;color:var(--txt2);cursor:pointer;
+  font:600 1.1rem var(--ui);line-height:1;
+}
+.toast-close:hover{color:var(--txt);border-color:var(--line-strong)}
+@keyframes toast-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes toast-out{to{opacity:0;transform:translateY(8px)}}
+
+/* ============================================================
    Responsive
    ============================================================ */
 @media (max-width:900px){

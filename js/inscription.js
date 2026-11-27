@@ -1,4 +1,5 @@
 import { supabase } from "./supabase.js";
+import { toast } from "./toast.js";
 
 const form = document.getElementById("signup-form");
 const message = document.getElementById("auth-message");
@@ -20,13 +21,15 @@ form.addEventListener("submit", async (event) => {
 
   if (error) {
     message.textContent = error.message;
+    toast(error.message, { tone: "err", id: "auth" });
     return;
   }
 
   if (data.session) {
     location.href = "profil.html";
   } else {
-    message.textContent =
-      "Compte créé. Vérifie ton adresse email, puis connecte-toi.";
+    const text = "Compte créé. Vérifie ton adresse email, puis connecte-toi.";
+    message.textContent = text;
+    toast(text, { tone: "ok", id: "auth" });
   }
 });
