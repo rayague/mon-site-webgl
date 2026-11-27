@@ -3,9 +3,18 @@ import { load, CATEGORIES } from "./data.js";
 import { card } from "./card.js";
 import { scan } from "./scroll.js";
 import { syncFavs, wireModals } from "./ui.js";
+import { supabase } from "./supabase.js";
 import "./iris.js";
 
 const data = await load();
+
+const {
+  data: { session },
+} = await supabase.auth.getSession();
+
+if (!session) {
+  location.replace("connexion.html?redirect=publier.html");
+}
 
 /* Valeurs affichées dans l’aperçu quand un champ texte est vide. */
 const PREVIEW_DEFAULTS = {
@@ -112,9 +121,43 @@ function updatePreview(el) {
 /* Première construction complète de l’aperçu (gravité et structure initiale). */
 render();
 
-/* soumission : 100 % front-end */
-field("pubForm").addEventListener("submit", (e) => {
-  e.preventDefault();
+/* Soumission enregistrée dans Supabase */
+field("pubForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  if (!session) {
+    location.replace("connexion.html?redirect=publier.html");
+    return;
+  }
+
+  const message = field("publish-message");
+  const submitButton = field("pubForm").querySelector('[type="submit"]');
+  submitButton.disabled = true;
+  message.textContent = "Publication en cours…";
+
+  const { error } = await supabase
+    .from("annonces")
+    .insert({
+      owner_id: session.user.id,
+      titre: field("titre").value.trim(),
+      categorie: field("categorie").value,
+      lieu: field("lieu").value.trim(),
+      date_event: field("date").value.trim(),
+      statut: field("statut").value,
+      extrait: field("extrait").value.trim(),
+      recit: field("recit").value.trim(),
+      gravite,
+      featured: false,
+      urgent: false,
+      nouveau: true,
+    });
+
+  if (error) {
+    submitButton.disabled = false;
+    message.textContent = error.message;
+    return;
+  }
+
   field("formGrid").hidden = true;
   field("confirm").hidden = false;
   syncFavs();

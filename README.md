@@ -2,13 +2,17 @@
 
 Site « annonces de l'ombre » construit derrière l'intro WebGL2 « Yeux » : une chronique nocturne qui dépose, chaque nuit, les horreurs du monde (disparitions, lieux maudits, objets troublants, …).
 
-## Contenu du dossier
+## Contenu du dossier:
 
 ```
 index.html         accueil : intro WebGL, hero, rail, à la une, compteurs, CTA
 annonces.html      gazette : liste, filtres (catégorie, statut), tri, recherche, favoris
 annonce.html       fiche bulletin : visuel, témoignage, galerie de variations, similaires
-publier.html       soumettre un bulletin : formulaire + aperçu live
+publier.html       soumettre un bulletin : formulaire + publication Supabase
+connexion.html     connexion au compte utilisateur
+inscription.html   création d’un compte utilisateur
+profil.html        modification du profil utilisateur
+mes-annonces.html  liste et suppression des annonces personnelles
 data/annonces.json source unique des 30 bulletins (8 catégories, statut, featured…)
 css/tokens.css     variables (palette, rayons, timing) — à ne pas modifier à la main
 css/base.css       hygiène, typo, nav, page-reveal

@@ -38,9 +38,8 @@
     <div class="container">
       <p class="section-kicker">Soumettre</p>
       <h1 class="section-title reveal-title" style="font-size:clamp(2.2rem,5.4vw,4rem)">Un bulletin pour l’œil</h1>
-      <p class="section-sub">Cette page est une démonstration : rien n’est envoyé.
-      Renseigne le formulaire, regarde l’aperçu vivre à côté, puis reçois le mot de la fin.
-      Une vraie soumission écrirait ici dans <code>data/annonces.json</code>.</p>
+      <p class="section-sub">Renseigne le formulaire, regarde l’aperçu vivre à côté,
+      puis soumets ton témoignage à la gazette. La publication est réservée aux utilisateurs connectés.</p>
 
       <div class="form-grid" id="formGrid" style="margin-top:clamp(26px,4vh,44px)">
         <form class="form-card" id="pubForm">
@@ -85,6 +84,7 @@
             <textarea id="recit" name="recit" required rows="6" placeholder="Date, lieux, personnes, détails qui ne tiennent pas…"></textarea>
           </div>
           <button class="btn primary" type="submit">Soumettre à l’œil</button>
+          <p id="publish-message" class="section-sub" role="status" style="margin-top:14px"></p>
         </form>
 
         <aside class="preview-sticky">
@@ -139,5 +139,6 @@
 </footer>
 
 <script type="module" src="js/publier.js"></script>
+<script type="module" src="js/auth-nav.js"></script>
 </body>
 </html>
