@@ -324,6 +324,8 @@
   border-radius:999px;padding:.5em 1em;cursor:pointer}
 .etiq-row button[aria-pressed=true]{color:var(--bg);background:var(--acc2);border-color:var(--acc2)}
 .preview-sticky{position:sticky;top:calc(76px + env(safe-area-inset-top,0px))}
+/* L’extrait de l’aperçu garde deux lignes, même quand le texte raccourcit. */
+#preview .card-excerpt{min-height:calc(1.55em * 2)}
 .confirm{position:relative;text-align:center;padding:clamp(60px,10vh,120px) 20px}
 .confirm .iris{width:84px;height:84px;margin:0 auto 26px;font-size:1.8rem}
 .confirm h1{font-size:clamp(2rem,5.5vw,3.8rem);margin-bottom:14px}
