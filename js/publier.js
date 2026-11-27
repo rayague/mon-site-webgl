@@ -167,13 +167,13 @@ field("pubForm").addEventListener("submit", async (event) => {
     return;
   }
 
-  toast("Bulletin déposé dans la gazette.", { tone: "ok", id: "publish" });
-  field("formGrid").hidden = true;
-  field("confirm").hidden = false;
-  syncFavs();
-  try {
-    scrollTo(0, 0);
-  } catch {}
+  message.textContent = "Bulletin déposé. Ouverture de la gazette…";
+  toast("Bulletin déposé dans la gazette.", {
+    tone: "ok",
+    id: "publish",
+    persist: true,
+  });
+  location.href = "annonces.html";
 });
 
 document.getElementById("footCats").innerHTML = CATEGORIES.map(

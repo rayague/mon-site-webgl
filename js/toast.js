@@ -1,6 +1,7 @@
 /* toast.js — notifications flottantes, en bas à droite. */
 
 const LIFE = 4800;
+const FLASH_KEY = "eclipse-toast";
 let region = null;
 
 function host() {
@@ -16,10 +17,17 @@ function host() {
 /**
  * Affiche un message temporaire.
  * @param {string} message
- * @param {{ tone?: "info" | "ok" | "err", id?: string }} [options]
+ * @param {{ tone?: "info" | "ok" | "err", id?: string, persist?: boolean }} [options]
  *   `id` remplace un toast déjà affiché avec le même identifiant.
+ *   `persist` le réaffiche sur la page suivante (après une redirection).
  */
-export function toast(message, { tone = "info", id } = {}) {
+export function toast(message, { tone = "info", id, persist = false } = {}) {
+  if (persist) {
+    try {
+      sessionStorage.setItem(FLASH_KEY, JSON.stringify({ message, tone, id }));
+    } catch {}
+  }
+
   const stack = host();
   if (id) {
     stack.querySelector(`[data-toast-id="${CSS.escape(id)}"]`)?.remove();
@@ -62,3 +70,14 @@ export function toast(message, { tone = "info", id } = {}) {
 
   while (stack.children.length > 3) stack.firstElementChild.remove();
 }
+
+try {
+  const raw = sessionStorage.getItem(FLASH_KEY);
+  if (raw) {
+    sessionStorage.removeItem(FLASH_KEY);
+    const saved = JSON.parse(raw);
+    if (saved && typeof saved.message === "string") {
+      toast(saved.message, { tone: saved.tone, id: saved.id });
+    }
+  }
+} catch {}
