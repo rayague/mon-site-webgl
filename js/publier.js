@@ -4,6 +4,7 @@ import { card } from "./card.js";
 import { scan } from "./scroll.js";
 import { syncFavs, wireModals } from "./ui.js";
 import { supabase } from "./supabase.js";
+import { toast } from "./toast.js";
 import "./iris.js";
 
 const data = await load();
@@ -44,7 +45,7 @@ fStatut.innerHTML = [...new Set(data.map((a) => a.statut))]
   .map((s) => `<option value="${s}">${s}</option>`)
   .join("");
 
-/* gravité : segmentation */
+/* gravité : segmentation. L’aperçu ne se reconstruit pas : seules les pastilles changent. */
 let gravite = 2;
 document.querySelectorAll(".seg [data-grav]").forEach((b) =>
   b.addEventListener("click", () => {
@@ -52,7 +53,7 @@ document.querySelectorAll(".seg [data-grav]").forEach((b) =>
     document
       .querySelectorAll(".seg [data-grav]")
       .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    render();
+    updateGravity();
   }),
 );
 
@@ -81,6 +82,13 @@ function render() {
   preview.innerHTML = card(draft());
   scan(preview);
   syncFavs();
+}
+
+function updateGravity() {
+  const n = preview.querySelector(".grav");
+  if (!n) return;
+  n.dataset.g = String(gravite);
+  n.setAttribute("aria-label", `Gravité ${gravite} sur 3`);
 }
 
 /**
@@ -155,15 +163,17 @@ field("pubForm").addEventListener("submit", async (event) => {
   if (error) {
     submitButton.disabled = false;
     message.textContent = error.message;
+    toast(error.message, { tone: "err", id: "publish" });
     return;
   }
 
-  field("formGrid").hidden = true;
-  field("confirm").hidden = false;
-  syncFavs();
-  try {
-    scrollTo(0, 0);
-  } catch {}
+  message.textContent = "Bulletin déposé. Ouverture de la gazette…";
+  toast("Bulletin déposé dans la gazette.", {
+    tone: "ok",
+    id: "publish",
+    persist: true,
+  });
+  location.href = "annonces.html";
 });
 
 document.getElementById("footCats").innerHTML = CATEGORIES.map(

@@ -1,4 +1,5 @@
 import { supabase } from "./supabase.js";
+import { toast } from "./toast.js";
 
 const form = document.getElementById("profile-form");
 const message = document.getElementById("profile-message");
@@ -18,6 +19,7 @@ if (!session) {
 
   if (readError) {
     message.textContent = readError.message;
+    toast(readError.message, { tone: "err", id: "profile" });
   } else if (profile) {
     document.getElementById("username").value = profile.username || "";
     document.getElementById("full-name").value = profile.full_name || "";
@@ -51,4 +53,5 @@ form.addEventListener("submit", async (event) => {
   message.textContent = error
     ? error.message
     : "Profil enregistré.";
+  toast(message.textContent, { tone: error ? "err" : "ok", id: "profile" });
 });

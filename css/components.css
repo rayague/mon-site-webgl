@@ -324,10 +324,42 @@
   border-radius:999px;padding:.5em 1em;cursor:pointer}
 .etiq-row button[aria-pressed=true]{color:var(--bg);background:var(--acc2);border-color:var(--acc2)}
 .preview-sticky{position:sticky;top:calc(76px + env(safe-area-inset-top,0px))}
+/* L’extrait de l’aperçu garde deux lignes, même quand le texte raccourcit. */
+#preview .card-excerpt{min-height:calc(1.55em * 2)}
 .confirm{position:relative;text-align:center;padding:clamp(60px,10vh,120px) 20px}
 .confirm .iris{width:84px;height:84px;margin:0 auto 26px;font-size:1.8rem}
 .confirm h1{font-size:clamp(2rem,5.5vw,3.8rem);margin-bottom:14px}
 .confirm p{color:var(--txt2);max-width:48ch;margin:0 auto 28px}
+
+/* ============================================================
+   Toaster — pile de notifications en bas à droite
+   ============================================================ */
+.toasts{
+  position:fixed;z-index:80;display:flex;flex-direction:column;gap:10px;
+  width:min(340px, calc(100vw - 32px));pointer-events:none;
+  right:max(16px, env(safe-area-inset-right));
+  bottom:max(16px, env(safe-area-inset-bottom));
+}
+.toast{
+  pointer-events:auto;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;
+  padding:14px 12px 14px 16px;border-radius:16px;color:var(--txt);
+  background:color-mix(in srgb, var(--surf2) 92%, transparent);
+  border:1px solid var(--line-strong);
+  box-shadow:0 18px 50px -24px #000;backdrop-filter:blur(10px);
+  animation:toast-in .4s var(--ease) both;
+}
+.toast p{margin:0;font:600 .9rem var(--ui);line-height:1.4}
+.toast.ok{border-color:color-mix(in oklab, var(--g2) 55%, var(--line))}
+.toast.err{border-color:color-mix(in srgb, var(--ember) 75%, var(--line));color:#ffdde0}
+.toast.out{animation:toast-out .28s var(--ease) forwards}
+.toast-close{
+  width:28px;height:28px;border-radius:50%;border:1px solid var(--line);
+  background:transparent;color:var(--txt2);cursor:pointer;
+  font:600 1.1rem var(--ui);line-height:1;
+}
+.toast-close:hover{color:var(--txt);border-color:var(--line-strong)}
+@keyframes toast-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes toast-out{to{opacity:0;transform:translateY(8px)}}
 
 /* ============================================================
    Responsive
