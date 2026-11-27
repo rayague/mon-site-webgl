@@ -45,7 +45,7 @@ fStatut.innerHTML = [...new Set(data.map((a) => a.statut))]
   .map((s) => `<option value="${s}">${s}</option>`)
   .join("");
 
-/* gravité : segmentation */
+/* gravité : segmentation. L’aperçu ne se reconstruit pas : seules les pastilles changent. */
 let gravite = 2;
 document.querySelectorAll(".seg [data-grav]").forEach((b) =>
   b.addEventListener("click", () => {
@@ -53,7 +53,7 @@ document.querySelectorAll(".seg [data-grav]").forEach((b) =>
     document
       .querySelectorAll(".seg [data-grav]")
       .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    render();
+    updateGravity();
   }),
 );
 
@@ -82,6 +82,13 @@ function render() {
   preview.innerHTML = card(draft());
   scan(preview);
   syncFavs();
+}
+
+function updateGravity() {
+  const n = preview.querySelector(".grav");
+  if (!n) return;
+  n.dataset.g = String(gravite);
+  n.setAttribute("aria-label", `Gravité ${gravite} sur 3`);
 }
 
 /**
